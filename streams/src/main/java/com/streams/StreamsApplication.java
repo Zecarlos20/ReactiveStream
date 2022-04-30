@@ -20,9 +20,9 @@ public class StreamsApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Flux<Usuario> nombres = Flux.just("zecarlos", "Jose", "Luis")
-                .map(nombre -> new Usuario(nombre.toUpperCase(), null))
-                .filter(nombre -> nombre.getNombre().equals("ZECARLOS"))
+        Flux<String> nombres = Flux.just("zecarlos", "Jose", "Luis");
+        Flux<Usuario> var = nombres.map(nombre -> new Usuario(nombre.toUpperCase(), null))
+                .filter(nombre -> nombre.getNombre().equalsIgnoreCase("ZECARLOS"))
                 .doOnNext(usuario -> {
                     if (usuario == null) {
                         throw new RuntimeException("Nombres no pueden estar vacios");
@@ -35,7 +35,7 @@ public class StreamsApplication implements CommandLineRunner {
                     return usuario;
                 });
         //nombres.subscribe();
-        nombres.subscribe(e -> log.info(e.toString()),
+        var.subscribe(e -> log.info(e.toString()),
                 error -> log.error(error.getMessage()),
                 new Runnable() {
                     @Override
